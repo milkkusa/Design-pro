@@ -1,0 +1,27 @@
+{% extends "main/base.html" %}
+{% block title %}Главная — Design.pro{% endblock %}
+{% block content %}
+<h1>Студия дизайна интерьеров Design.pro</h1>
+
+<p class="lead">Принято в работу: <span class="badge bg-primary">{{ in_work_count }}</span></p>
+
+<h2 class="mt-4">Наши последние работы</h2>
+<div class="row">
+  {% for app in done_apps %}
+    <div class="col-md-3 mb-3">
+      <div class="card h-100">
+        {% if app.design_image %}
+          <img src="{{ app.design_image.url }}" class="card-img-top" alt="{{ app.title }}">
+        {% endif %}
+        <div class="card-body">
+          <h5 class="card-title">{{ app.title }}</h5>
+          <p class="card-text mb-1">Категория: {{ app.category.name }}</p>
+          <small class="text-muted">{{ app.created_at|date:"d.m.Y H:i" }}</small>
+        </div>
+      </div>
+    </div>
+  {% empty %}
+    <p>Пока нет выполненных работ.</p>
+  {% endfor %}
+</div>
+{% endblock %}

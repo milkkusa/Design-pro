@@ -1,0 +1,15 @@
+{% extends "main/base.html" %}
+{% block title %}Личный кабинет{% endblock %}
+{% block content %}
+<h2>Личный кабинет</h2>
+<p>Здравствуйте, {{ user.fio }}!</p>
+<h4>Мои заявки</h4>
+<ul>
+  {% for app in applications %}
+    <li>{{ app.title }} — {{ app.get_status_display }}</li>
+  {% empty %}
+    <li>У вас пока нет заявок.</li>
+  {% endfor %}
+</ul>
+{% endblock %} 
+#заготовочка к ужину >:^D
