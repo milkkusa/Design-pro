@@ -1,3 +1,6 @@
 .has-error input.form-control { border-color: #dc3545; background: #fff5f5; }
 .error-text { color: #dc3545; font-size: 0.9rem; margin-top: 4px; }
 .card-img-top { height: 180px; object-fit: cover; }
+
+.logout-btn { color: rgba(255, 255, 255, .5); text-decoration: none; }
+.logout-btn:hover { color: rgba(255, 255, 255, .75); text-decoration: none; }
