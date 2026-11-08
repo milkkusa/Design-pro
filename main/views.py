@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect
-from .forms import RegisterForm
+from .forms import RegisterForm, ApplicationForm
 from .models import Application
 
 def index(request):
@@ -34,3 +34,17 @@ def profile(request):
     #Личный кабинет(на будущее ок)
     apps = Application.objects.filter(user=request.user)
     return render(request, 'main/profile.html', {'applications': apps})
+
+@login_required
+def create_application(request):
+    if request.method == 'POST':
+        form = ApplicationForm(request.POST, request.FILES)
+        if form.is_valid():
+            application = form.save(commit=False)
+            application.user = request.user
+            application.save()
+            messages.success(request, 'Заявка успешно создана.')
+            return redirect('profile')
+    else:
+        form = ApplicationForm()
+    return render(request, 'main/create_application.html', {'form': form})

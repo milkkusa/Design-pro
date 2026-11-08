@@ -1,6 +1,7 @@
+import os
 from django import forms
 from django.core.validators import RegexValidator
-from .models import User
+from .models import User, Application
 
 
 class RegisterForm(forms.ModelForm):
@@ -54,3 +55,33 @@ class RegisterForm(forms.ModelForm):
         if commit:
             user.save()
         return user
+
+class ApplicationForm(forms.ModelForm):
+    class Meta:
+        model = Application
+        fields = ['title', 'description', 'category', 'image']
+        labels = {
+            'title': 'Название',
+            'description': 'Описание',
+            'category': 'Категория',
+            'image': 'Фото помещения или план',
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for name, field in self.fields.items():
+            if name == 'image':
+                field.widget.attrs['class'] = 'form-control-file'
+            else:
+                field.widget.attrs['class'] = 'form-control'
+        self.fields['category'].empty_label = 'Выберите категорию'
+
+    # проверка файла: формат и размер
+    def clean_image(self):
+        image = self.cleaned_data['image']
+        ext = os.path.splitext(image.name)[1].lower()
+        if ext not in ['.jpg', '.jpeg', '.png', '.bmp']:
+            raise forms.ValidationError('Допустимые форматы: jpg, jpeg, png, bmp.')
+        if image.size > 2 * 1024 * 1024:
+            raise forms.ValidationError('Размер файла не должен превышать 2 Мб.')
+        return image

@@ -4,3 +4,6 @@
 
 .logout-btn { color: rgba(255, 255, 255, .5); text-decoration: none; }
 .logout-btn:hover { color: rgba(255, 255, 255, .75); text-decoration: none; }
+
+.has-error select.form-control,
+.has-error textarea.form-control { border-color: #dc3545; background: #fff5f5; }

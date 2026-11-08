@@ -1,0 +1,21 @@
+{% extends "main/base.html" %}
+{% block title %}Создание заявки{% endblock %}
+{% block content %}
+<div class="col-md-7 mx-auto">
+  <h2>Новая заявка на дизайн интерьера</h2>
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="form-group {% if field.errors %}has-error{% endif %}">
+        <label>{{ field.label }}</label>
+        {{ field }}
+        {% for error in field.errors %}
+          <div class="error-text">{{ error }}</div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Отправить заявку</button>
+    <a href="{% url 'profile' %}" class="btn btn-secondary">Отмена</a>
+  </form>
+</div>
+{% endblock %}
