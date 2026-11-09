@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import RegisterForm, ApplicationForm
 from .models import Application
 
@@ -54,3 +54,18 @@ def create_application(request):
     else:
         form = ApplicationForm()
     return render(request, 'main/create_application.html', {'form': form})
+
+@login_required
+def delete_application(request, pk):
+    application = get_object_or_404(Application, pk=pk, user=request.user)
+
+    if application.status != 'new':
+        messages.error(request, 'Нельзя удалить заявку, которая уже принята в работу или выполнена.')
+        return redirect('profile')
+
+    if request.method == 'POST':
+        application.delete()
+        messages.success(request, 'Заявка удалена.')
+        return redirect('profile')
+
+    return render(request, 'main/application_confirm_delete.html', {'application': application})
