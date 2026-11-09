@@ -4,6 +4,17 @@
 <h2>Мои заявки</h2>
 <p>Здравствуйте, {{ user.fio }}!</p>
 
+<form method="get" class="form-inline mb-3">
+  <label class="mr-2">Статус:</label>
+  <select name="status" class="form-control mr-2">
+    <option value="">Все</option>
+    {% for value, label in statuses %}
+      <option value="{{ value }}" {% if status == value %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+  </select>
+  <button type="submit" class="btn btn-primary">Применить</button>
+</form>
+
 <a href="{% url 'create_application' %}" class="btn btn-success mb-3">Создать заявку</a>
 
 <table class="table table-bordered">

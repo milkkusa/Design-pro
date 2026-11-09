@@ -31,9 +31,15 @@ def register(request):
 
 @login_required
 def profile(request):
-    #Личный кабинет(на будущее ок)
-    apps = Application.objects.filter(user=request.user)
-    return render(request, 'main/profile.html', {'applications': apps})
+    applications = Application.objects.filter(user=request.user)
+    status = request.GET.get('status', '')
+    if status in ['new', 'in_work', 'done']:
+        applications = applications.filter(status=status)
+    return render(request, 'main/profile.html', {
+        'applications': applications,
+        'status': status,
+        'statuses': Application.STATUS_CHOICES,
+    })
 
 @login_required
 def create_application(request):
