@@ -28,6 +28,7 @@
         <td>
         {% if app.status == 'new' %}
             <a href="{% url 'set_in_work' app.pk %}" class="btn btn-warning btn-sm">Принять в работу</a>
+            <a href="{% url 'set_done' app.pk %}" class="btn btn-success btn-sm">Выполнено</a>
         {% endif %}
         </td>
       </tr>

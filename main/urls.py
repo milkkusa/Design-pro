@@ -12,5 +12,6 @@ urlpatterns = [
     path('application/<int:pk>/delete/', views.delete_application, name='delete_application'),
     path('superadmin/', views.admin_panel, name='admin_panel'),
     path('superadmin/application/<int:pk>/in-work/', views.set_in_work, name='set_in_work'),
+    path('superadmin/application/<int:pk>/done/', views.set_done, name='set_done'),
 ]
 

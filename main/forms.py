@@ -90,3 +90,14 @@ class InWorkForm(forms.Form):
     comment = forms.CharField(
         label='Комментарий',
         widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4}))
+
+class DoneForm(forms.ModelForm):
+    class Meta:
+        model = Application
+        fields = ['design_image']
+        labels = {'design_image': 'Изображение дизайна'}
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['design_image'].required = True
+        self.fields['design_image'].widget.attrs['class'] = 'form-control-file'

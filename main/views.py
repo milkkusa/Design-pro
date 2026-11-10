@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required,  user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import RegisterForm, ApplicationForm, InWorkForm
+from .forms import RegisterForm, ApplicationForm, InWorkForm, DoneForm
 from .models import Application
 
 def index(request):
@@ -83,7 +83,7 @@ def admin_panel(request):
 
 @user_passes_test(is_admin, login_url='index')
 def set_in_work(request, pk):
-    """Смена статуса «Новая» - «Принято в работу» с комментарием."""
+    """Смена статуса «Новая» - «Принято в работу» с комментарием"""
     application = get_object_or_404(Application, pk=pk)
 
     if application.status != 'new':
@@ -105,4 +105,30 @@ def set_in_work(request, pk):
         'form': form,
         'application': application,
         'action': 'Принять в работу',
+    })
+
+@user_passes_test(is_admin, login_url='index')
+def set_done(request, pk):
+    """Смена статуса «Новая» - «Выполнено» с картинкой"""
+    application = get_object_or_404(Application, pk=pk)
+
+    if application.status != 'new':
+        messages.error(request, 'Сменить статус можно только у заявки со статусом «Новая».')
+        return redirect('admin_panel')
+
+    if request.method == 'POST':
+        form = DoneForm(request.POST, request.FILES, instance=application)
+        if form.is_valid():
+            application = form.save(commit=False)
+            application.status = 'done'
+            application.save()
+            messages.success(request, 'Заявка выполнена.')
+            return redirect('admin_panel')
+    else:
+        form = DoneForm(instance=application)
+
+    return render(request, 'main/change_status.html', {
+        'form': form,
+        'application': application,
+        'action': 'Заявка выполнена',
     })
