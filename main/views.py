@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required,  user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
 from .forms import RegisterForm, ApplicationForm
 from .models import Application
@@ -31,6 +31,8 @@ def register(request):
 
 @login_required
 def profile(request):
+    if request.user.is_staff:
+        return redirect('admin_panel')
     applications = Application.objects.filter(user=request.user)
     status = request.GET.get('status', '')
     if status in ['new', 'in_work', 'done']:
@@ -69,3 +71,12 @@ def delete_application(request, pk):
         return redirect('profile')
 
     return render(request, 'main/application_confirm_delete.html', {'application': application})
+
+def is_admin(user):
+    return user.is_staff
+
+
+@user_passes_test(is_admin, login_url='index')
+def admin_panel(request):
+    applications = Application.objects.select_related('user', 'category')
+    return render(request, 'main/admin_panel.html', {'applications': applications})

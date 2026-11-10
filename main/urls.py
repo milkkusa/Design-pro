@@ -10,5 +10,6 @@ urlpatterns = [
     path('logout/', LogoutView.as_view(), name='logout'),
     path('application/create/', views.create_application, name='create_application'),
     path('application/<int:pk>/delete/', views.delete_application, name='delete_application'),
+    path('superadmin/', views.admin_panel, name='admin_panel'),
 ]
 

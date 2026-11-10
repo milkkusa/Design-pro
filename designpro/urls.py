@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('superadmin/', admin.site.urls), #как по тз опять же адрес
+    path('django-admin/', admin.site.urls),
     path('', include('main.urls')),
 ]
 

@@ -12,24 +12,26 @@
 <nav class="navbar navbar-expand navbar-dark bg-dark">
   <div class="container">
     <a class="navbar-brand" href="{% url 'index' %}">Design.pro</a>
-    <ul class="navbar-nav ms-auto">
-      <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Главная</a></li>
-      {% if user.is_authenticated %}
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'profile' %}">Личный кабинет</a></li>
-        <li class="nav-item">
-          <a class="nav-link" href="{% url 'create_application' %}">Создать заявку</a></li>
-        <li class="nav-item">
-          <form method="post" action="{% url 'logout' %}">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-link nav-link logout-btn">Выход</button>
-          </form>
-        </li>
+    <ul class="navbar-nav ml-auto">
+    <li class="nav-item"><a class="nav-link" href="{% url 'index' %}">Главная</a></li>
+    {% if user.is_authenticated %}
+      {% if user.is_staff %}
+        <li class="nav-item"><a class="nav-link" href="{% url 'admin_panel' %}">Панель администратора</a></li>
       {% else %}
-        <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Вход</a></li>
-        <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Регистрация</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'profile' %}">Мои заявки</a></li>
+        <li class="nav-item"><a class="nav-link" href="{% url 'create_application' %}">Создать заявку</a></li>
       {% endif %}
-    </ul>
+      <li class="nav-item">
+        <form method="post" action="{% url 'logout' %}">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-link nav-link logout-btn">Выход</button>
+        </form>
+      </li>
+    {% else %}
+      <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Вход</a></li>
+      <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Регистрация</a></li>
+    {% endif %}
+  </ul>
   </div>
 </nav>
 
