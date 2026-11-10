@@ -85,3 +85,8 @@ class ApplicationForm(forms.ModelForm):
         if image.size > 2 * 1024 * 1024:
             raise forms.ValidationError('Размер файла не должен превышать 2 Мб.')
         return image
+
+class InWorkForm(forms.Form):
+    comment = forms.CharField(
+        label='Комментарий',
+        widget=forms.Textarea(attrs={'class': 'form-control', 'rows': 4}))

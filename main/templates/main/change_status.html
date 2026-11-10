@@ -1,0 +1,23 @@
+{% extends "main/base.html" %}
+{% block title %}{{ action }}{% endblock %}
+{% block content %}
+<div class="col-md-7 mx-auto">
+  <h2>{{ action }}</h2>
+  <p>Заявка: <strong>{{ application.title }}</strong> ({{ application.category.name }})</p>
+
+  <form method="post" enctype="multipart/form-data" novalidate>
+    {% csrf_token %}
+    {% for field in form %}
+      <div class="form-group {% if field.errors %}has-error{% endif %}">
+        <label>{{ field.label }}</label>
+        {{ field }}
+        {% for error in field.errors %}
+          <div class="error-text">{{ error }}</div>
+        {% endfor %}
+      </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary">Сохранить</button>
+    <a href="{% url 'admin_panel' %}" class="btn btn-secondary">Отмена</a>
+  </form>
+</div>
+{% endblock %}

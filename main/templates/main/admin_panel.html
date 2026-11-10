@@ -26,7 +26,9 @@
         <td>{{ app.get_status_display }}</td>
         <td><a href="{{ app.image.url }}" target="_blank">Открыть</a></td>
         <td>
-          <!-- сюда добавим кнопки смены статуса -->
+        {% if app.status == 'new' %}
+            <a href="{% url 'set_in_work' app.pk %}" class="btn btn-warning btn-sm">Принять в работу</a>
+        {% endif %}
         </td>
       </tr>
     {% empty %}

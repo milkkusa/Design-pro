@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required,  user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import RegisterForm, ApplicationForm
+from .forms import RegisterForm, ApplicationForm, InWorkForm
 from .models import Application
 
 def index(request):
@@ -80,3 +80,29 @@ def is_admin(user):
 def admin_panel(request):
     applications = Application.objects.select_related('user', 'category')
     return render(request, 'main/admin_panel.html', {'applications': applications})
+
+@user_passes_test(is_admin, login_url='index')
+def set_in_work(request, pk):
+    """Смена статуса «Новая» - «Принято в работу» с комментарием."""
+    application = get_object_or_404(Application, pk=pk)
+
+    if application.status != 'new':
+        messages.error(request, 'Сменить статус можно только у заявки со статусом «Новая».')
+        return redirect('admin_panel')
+
+    if request.method == 'POST':
+        form = InWorkForm(request.POST)
+        if form.is_valid():
+            application.comment = form.cleaned_data['comment']
+            application.status = 'in_work'
+            application.save()
+            messages.success(request, 'Заявка принята в работу.')
+            return redirect('admin_panel')
+    else:
+        form = InWorkForm()
+
+    return render(request, 'main/change_status.html', {
+        'form': form,
+        'application': application,
+        'action': 'Принять в работу',
+    })
