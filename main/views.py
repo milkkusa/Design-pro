@@ -1,8 +1,8 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required,  user_passes_test
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import RegisterForm, ApplicationForm, InWorkForm, DoneForm
-from .models import Application
+from .forms import RegisterForm, ApplicationForm, InWorkForm, DoneForm, CategoryForm
+from .models import Application, Category
 
 def index(request):
     #Главная: последни заявки + счетчик
@@ -131,4 +131,36 @@ def set_done(request, pk):
         'form': form,
         'application': application,
         'action': 'Заявка выполнена',
+    })
+
+@user_passes_test(is_admin, login_url='index')
+def categories(request):
+    """Список категорий и форма добавления новой"""
+    if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Категория добавлена.')
+            return redirect('categories')
+    else:
+        form = CategoryForm()
+    return render(request, 'main/categories.html', {
+        'categories': Category.objects.all(),
+        'form': form,
+    })
+
+
+@user_passes_test(is_admin, login_url='index')
+def delete_category(request, pk):
+    """Удаление категории"""
+    category = get_object_or_404(Category, pk=pk)
+
+    if request.method == 'POST':
+        category.delete()
+        messages.success(request, 'Категория и все её заявки удалены.')
+        return redirect('categories')
+
+    return render(request, 'main/category_confirm_delete.html', {
+        'category': category,
+        'count': category.application_set.count(),
     })

@@ -1,7 +1,7 @@
 import os
 from django import forms
 from django.core.validators import RegexValidator
-from .models import User, Application
+from .models import User, Application, Category
 
 
 class RegisterForm(forms.ModelForm):
@@ -101,3 +101,11 @@ class DoneForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['design_image'].required = True
         self.fields['design_image'].widget.attrs['class'] = 'form-control-file'
+
+class CategoryForm(forms.ModelForm):
+    class Meta:
+        model = Category
+        fields = ['name']
+        labels = {'name': 'Название категории'}
+        widgets = {'name': forms.TextInput(attrs={'class': 'form-control'})}
+        error_messages = {'name': {'unique': 'Такая категория уже существует.'}}

@@ -13,5 +13,7 @@ urlpatterns = [
     path('superadmin/', views.admin_panel, name='admin_panel'),
     path('superadmin/application/<int:pk>/in-work/', views.set_in_work, name='set_in_work'),
     path('superadmin/application/<int:pk>/done/', views.set_done, name='set_done'),
+    path('superadmin/categories/', views.categories, name='categories'),
+    path('superadmin/categories/<int:pk>/delete/', views.delete_category, name='delete_category'),
 ]
 
