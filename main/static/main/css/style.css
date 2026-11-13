@@ -7,3 +7,4 @@
 
 .has-error select.form-control,
 .has-error textarea.form-control { border-color: #dc3545; background: #fff5f5; }
+.thumb { max-width: 150px; height: auto; border-radius: 4px; }

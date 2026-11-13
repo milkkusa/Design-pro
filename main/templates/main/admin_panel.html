@@ -12,6 +12,8 @@
       <th>Название</th>
       <th>Категория</th>
       <th>Статус</th>
+      <th>Комментарий</th>
+      <th>Дизайн</th>
       <th>Фото</th>
       <th>Действия</th>
     </tr>
@@ -24,16 +26,28 @@
         <td>{{ app.title }}</td>
         <td>{{ app.category.name }}</td>
         <td>{{ app.get_status_display }}</td>
+        <td>
+          {% if app.comment %}
+            {{ app.comment }}
+          {% endif %}
+        </td>
+        <td>
+          {% if app.design_image %}
+            <a href="{{ app.design_image.url }}" target="_blank">
+              <img src="{{ app.design_image.url }}" alt="Дизайн" class="thumb">
+            </a>
+          {% endif %}
+        </td>
         <td><a href="{{ app.image.url }}" target="_blank">Открыть</a></td>
         <td>
-        {% if app.status == 'new' %}
+          {% if app.status == 'new' %}
             <a href="{% url 'set_in_work' app.pk %}" class="btn btn-warning btn-sm">Принять в работу</a>
             <a href="{% url 'set_done' app.pk %}" class="btn btn-success btn-sm">Выполнено</a>
-        {% endif %}
+          {% endif %}
         </td>
       </tr>
     {% empty %}
-      <tr><td colspan="7">Заявок нет.</td></tr>
+      <tr><td colspan="9">Заявок нет.</td></tr>
     {% endfor %}
   </tbody>
 </table>

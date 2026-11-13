@@ -25,6 +25,8 @@
       <th>Описание</th>
       <th>Категория</th>
       <th>Статус</th>
+      <th>Комментарий администратора</th>
+      <th>Изображение дизайна</th>
       <th></th>
     </tr>
   </thead>
@@ -36,6 +38,17 @@
         <td>{{ app.description }}</td>
         <td>{{ app.category.name }}</td>
         <td>{{ app.get_status_display }}</td>
+        <th>{% if app.comment %}
+            {{ app.comment }}
+          {% endif %}
+        </th>
+        <th>
+           {% if app.design_image %}
+            <a href="{{ app.design_image.url }}" target="_blank">
+              <img src="{{ app.design_image.url }}" alt="Дизайн" class="thumb">
+            </a>
+          {% endif %}
+        </th>
         <td>
           {% if app.status == 'new' %}
             <a href="{% url 'delete_application' app.pk %}" class="btn btn-danger btn-sm">Удалить</a>
